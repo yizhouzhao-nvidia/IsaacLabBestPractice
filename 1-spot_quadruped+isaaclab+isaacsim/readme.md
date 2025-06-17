@@ -26,7 +26,8 @@ Follow this tutorial to [train a Spot Quadruped Robot](https://isaac-sim.github.
 
 ```bash
 # execute from the root directory of the repository
-./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task Isaac-Velocity-Flat-Spot-v0 --num_envs 4096 --headless --video --enable_cameras
+# export CUDA_VISIBLE_DEVICES=1 # for multi-gpu
+./isaaclab.sh -p scripts/reinforcement_learning/rsl_rl/train.py --task Isaac-Velocity-Flat-Spot-v0 --num_envs 4096 --headless --video --enable_cameras --max_iterations 200
 ```
 
 Under root directory of IsaacLab, you can see the trained nn policy under `logs/rsl_rl/spot_flat/<data_time>/model_*.pt`
