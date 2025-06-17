@@ -156,7 +156,8 @@ class Extension(omni.ext.IExt):
         self.ui_builder.on_timeline_event(event)
 
     def _on_physics_step(self, step):
-        self.ui_builder.on_physics_step(step)
+        pass
+        # self.ui_builder.on_physics_step(step)
 
     def _on_stage_event(self, event):
         if event.type == int(StageEventType.OPENED) or event.type == int(StageEventType.CLOSED):

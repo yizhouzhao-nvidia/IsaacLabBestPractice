@@ -16,6 +16,8 @@ from isaacsim.core.utils.types import ArticulationAction
 from isaacsim.gui.components.element_wrappers import CollapsableFrame, DropDown, FloatField, TextBlock
 from isaacsim.gui.components.ui_utils import get_style
 
+from .scene_manager import SceneManager
+
 
 class UIBuilder:
     def __init__(self):
@@ -123,6 +125,9 @@ class UIBuilder:
                 )
 
         self._robot_control_frame = CollapsableFrame("Robot Control Frame", collapsed=True, enabled=False)
+
+        ui.Button("New Scene", clicked_fn=SceneManager.new_scene)
+        ui.Button("Add Robot", clicked_fn=SceneManager.add_robot)
 
         def build_robot_control_frame_fn():
             self._joint_control_frames = []
@@ -252,3 +257,8 @@ class UIBuilder:
     #             if type == "articulation":
     #                 items.append(path)
     #     return items
+
+#####################################
+
+    def debug(self):
+        print("Creating new scene")
