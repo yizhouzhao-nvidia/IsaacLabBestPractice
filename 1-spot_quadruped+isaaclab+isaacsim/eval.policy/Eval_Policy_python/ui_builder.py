@@ -16,6 +16,9 @@ from isaacsim.core.utils.types import ArticulationAction
 from isaacsim.gui.components.element_wrappers import CollapsableFrame, DropDown, FloatField, TextBlock
 from isaacsim.gui.components.ui_utils import get_style
 
+import isaaclab.utils.math as math_utils
+from isaaclab.assets import Articulation as isaaclab_Articulation
+
 from .scene_manager import SceneManager
 
 
@@ -61,14 +64,6 @@ class UIBuilder:
         """
         pass
 
-    def on_physics_step(self, step):
-        """Callback for Physics Step.
-        Physics steps only occur when the timeline is playing
-
-        Args:
-            step (float): Size of physics step
-        """
-        pass
 
     def on_stage_event(self, event):
         """Callback for Stage Events
@@ -128,6 +123,7 @@ class UIBuilder:
 
         ui.Button("New Scene", clicked_fn=SceneManager.new_scene)
         ui.Button("Add Robot", clicked_fn=SceneManager.add_robot)
+        ui.Button("Debug", clicked_fn=self.debug)
 
         def build_robot_control_frame_fn():
             self._joint_control_frames = []
@@ -262,3 +258,44 @@ class UIBuilder:
 
     def debug(self):
         print("Creating new scene")
+        from isaaclab_assets.robots.spot import SPOT_CFG 
+        cfg = SPOT_CFG.replace(prim_path="/World/Spot").replace(spawn=None)
+        self.spot = isaaclab_Articulation(cfg)
+        
+ 
+
+        # self.spot = isaaclab_Articulation(SPOT_CFG.replace(prim_path="/World/Spot"))
+
+
+    def on_physics_step(self, step):
+        """Callback for Physics Step.
+        Physics steps only occur when the timeline is playing
+
+        Args:
+            step (float): Size of physics step
+        """
+        # if self.articulation is not None:   
+        #     # print("physics view", self.articulation._articulation_view._physics_view)
+        #     physics_view = self.articulation._articulation_view._physics_view
+        #     pose = physics_view.get_root_transforms().copy()
+        #     pose[:, 3:7] = math_utils.convert_quat(pose[:, 3:7], to="wxyz")
+        #     print("pose", pose)
+        #     root_com_vel_w = physics_view.get_root_velocities()
+            
+            # math_utils.quat_apply_inverse(pose[:, 3:7], root_link_vel_w[:, :3])
+
+        if self.spot is not None:
+            print("data", self.spot.num_instances)
+            print("num_joints", self.spot.num_joints)
+            print("view", self.spot._physics_sim_view)
+            print("initialized", self.spot.is_initialized)
+
+            if not hasattr(self.spot, "_data"):
+                # self.spot._initialize_impl() 
+
+                from isaacsim.core.simulation_manager import SimulationManager
+                physics_sim_view = SimulationManager.get_physics_sim_view()
+                print("physics_sim_view", physics_sim_view)
+                device = SimulationManager.get_physics_sim_device()
+                print("device", device)
+                # self.spot._initialize_impl()
